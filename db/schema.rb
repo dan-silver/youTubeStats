@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131214213650) do
+ActiveRecord::Schema.define(version: 20131214230026) do
 
   create_table "channels", force: true do |t|
     t.string   "name"
@@ -38,6 +38,17 @@ ActiveRecord::Schema.define(version: 20131214213650) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+
+  create_table "video_statistics", force: true do |t|
+    t.integer  "video_id"
+    t.integer  "viewCount"
+    t.integer  "likeCount"
+    t.integer  "dislikeCount"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "video_statistics", ["video_id"], name: "index_video_statistics_on_video_id"
 
   create_table "videos", force: true do |t|
     t.string   "title"
