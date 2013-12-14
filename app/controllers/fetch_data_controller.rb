@@ -20,13 +20,13 @@ class FetchDataController < ApplicationController
     )
 
     search_response.data.items.each do |search_result|
+      next if Video.find_by_youtubeVideoId search_result.id.videoId
       channel.videos << Video.new do |v|
         v.title = search_result.snippet.title
         v.channel_id = channelId
         v.youtubeVideoId = search_result.id.videoId
       end
       channel.save
-
     end
   end
 
