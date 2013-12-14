@@ -24,10 +24,10 @@ class FetchDataController < ApplicationController
 
   def getStats (channelId = 1)
   	channel = Channel.find channelId
-    vid_ids = channel.videos.map{|video| video.youtubeVideoId}.join(",")
+    vid_ids = channel.videos.map{|video| video.youtubeVideoId}.join ","
     client = createGoogleClient
 
-    youtube = client.discovered_api("youtube", "v3")
+    youtube = client.discovered_api "youtube", "v3"
 
     opts = Trollop::options do
       opt :maxResults, 'Max results', :default => 50
@@ -40,10 +40,20 @@ class FetchDataController < ApplicationController
       :parameters => opts
     )
 
-    search_response.data.items
+    search_response.data.items.each do |result|
+      video = Video.find_by_youtubeVideoId result.id
+      video.stats << VideoStatistic.create do |stat|
+        stat.video_id = result.id
+        stat.viewCount = result.statistics.viewCount
+        stat.likeCount = result.statistics.likeCount
+        stat.dislikeCount = result.statistics.dislikeCount
+      end
+      video.save
+    end
   end
 
   def createVideos (channelId = 1)
+  	channel = Channel.find channelId
     videos = fetchVideos channelId
     puts "Checking #{videos.length} videos"
     videos.each do |search_result|
