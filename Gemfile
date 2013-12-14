@@ -14,6 +14,8 @@ gem 'figaro'
 gem 'haml-rails'
 gem 'simple_form'
 gem 'thin'
+gem 'google-api-client', :require => 'google/api_client'
+gem 'trollop'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
