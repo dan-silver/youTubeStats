@@ -23,6 +23,7 @@ class FetchDataController < ApplicationController
       channel.videos << Video.new do |v|
         v.title = search_result.snippet.title
         v.channel_id = channelId
+        v.youtubeVideoId = search_result.id.videoId
       end
       channel.save
 
