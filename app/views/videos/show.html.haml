@@ -2,4 +2,15 @@
   =@video.title
   by
   =link_to @video.channel.name, @video.channel
-%h4 Stats here...
+%table.table.table-striped.table-bordered
+  %tr
+    %th Date
+    %th Likes
+    %th Dislikes
+    %th Views
+  -@video.stats.each do |stat|
+    %tr
+      %td=stat.created_at.to_formatted_s(:day_month_year)
+      %td=stat.likeCount
+      %td=stat.dislikeCount
+      %td=stat.viewCount
