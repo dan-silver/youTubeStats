@@ -15,6 +15,6 @@ module GoogleApi
   end
 
   def self.youtube
-    GoogleApi.client.discovered_api("youtube", "v3")
+    GoogleApi.client.discovered_api "youtube", "v3"
   end
 end
