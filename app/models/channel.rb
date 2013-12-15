@@ -1,14 +1,14 @@
+require 'google_api'
 class Channel < ActiveRecord::Base
   has_many :videos
-  require 'google_api'
 
   def fetchVideos
-    @id = youTubeId #hack
+    @@id = youTubeId #hack
     opts = Trollop::options do
       opt :maxResults, 'Max results', :default => 50
       opt :type, 'Type', :default => 'video'
       opt :order, 'Order', :default => 'viewCount'
-      opt :channelId, 'Channel Id', :default => @id
+      opt :channelId, 'Channel Id', :default => @@id
     end
 
     opts[:part] = 'id,snippet'
@@ -46,16 +46,17 @@ class Channel < ActiveRecord::Base
   end
 
   def createVideos
-  	videos = fetchVideos self.id
+  	videos = fetchVideos
     puts "Checking #{videos.length} videos"
     videos.each do |search_result|
       next if Video.find_by_youtubeVideoId search_result.id.videoId
       self.videos << Video.new do |v|
         v.title = search_result.snippet.title
-        v.channel_id = self.id
+        v.channel_id = id
         v.youtubeVideoId = search_result.id.videoId
       end
       self.save
     end
+    nil
   end
 end
