@@ -3,4 +3,5 @@ YouTrade::Application.routes.draw do
   devise_for :users, :controllers => {:registrations => "registrations"}
   resources :users
   resources :channels
+  resources :videos
 end

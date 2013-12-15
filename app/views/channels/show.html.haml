@@ -1,0 +1,4 @@
+%h1=@channel.name
+%ul
+  -@channel.videos.each do |video|
+    %li=link_to video.title, video
