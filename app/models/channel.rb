@@ -17,30 +17,6 @@ class Channel < ActiveRecord::Base
     response.data.items
   end
 
-  def getStats
-  	vid_ids = self.videos.map{|video| video.youtubeVideoId}.join ","
-
-    options = {
-      :maxResults => 50,
-      :id => vid_ids,
-      :part => 'statistics'
-    }
-    response = GoogleApi.client.execute!(
-      :api_method => GoogleApi.youtube.videos.list,
-      :parameters => options
-    )
-
-    response.data.items.each do |result|
-      video = Video.find_by_youtubeVideoId result.id
-      VideoStatistic.create do |stat|
-        stat.video_id = video.id
-        stat.viewCount = result.statistics.viewCount
-        stat.likeCount = result.statistics.likeCount
-        stat.dislikeCount = result.statistics.dislikeCount
-      end
-    end
-  end
-
   def createVideos
   	videos = fetchVideos
     puts "Checking #{videos.length} videos"
@@ -53,5 +29,45 @@ class Channel < ActiveRecord::Base
       end
     end
     nil
+  end
+
+  def self.fetchTopVideos
+    options = {
+      :maxResults => 50,
+      :type => "video",
+      :order => "viewCount",
+      :part => "id,snippet"
+    }
+    response = GoogleApi.client.execute!(
+      :api_method => GoogleApi.youtube.search.list,
+      :parameters => options
+    )
+
+    newChannels = []
+
+    response.data.items.each do |video|
+      newChannels << video.snippet.channel_id unless Channel.find_by_youTubeId video.snippet.channelId
+    end
+
+    options = {
+      :maxResults => 50,
+      :part => "id,snippet,statistics",
+      :id => newChannels.join(",")
+    }
+
+    response = GoogleApi.client.execute!(
+      :api_method => GoogleApi.youtube.channels.list,
+      :parameters => options
+    )
+    response.data.items.each do |channel|
+      Channel.create do |c|
+        c.name = channel.snippet.title
+        c.youTubeId = channel.id
+      end
+    end
+  end
+
+  def self.getAllVideos
+    Channel.all.each {|c| c.createVideos}
   end
 end
