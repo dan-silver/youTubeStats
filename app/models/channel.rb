@@ -31,7 +31,7 @@ class Channel < ActiveRecord::Base
     nil
   end
 
-  def self.fetchTopVideos
+  def self.fetchChannelsByTopVideos
     options = {
       :maxResults => 50,
       :type => "video",
