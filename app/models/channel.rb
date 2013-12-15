@@ -54,11 +54,10 @@ class Channel < ActiveRecord::Base
 
       nextPageToken = response.data.nextPageToken
       response.data.items.each do |video|
-        newChannels << video.snippet.channel_id unless Channel.find_by_youTubeId video.snippet.channelId or newChannels.include?(video.snippet.channel_id)
+        newChannels << video.snippet.channel_id unless newChannels.include?(video.snippet.channel_id)
       end
     end
-
-    
+    newChannels -= Channel.all.map {|a| a.youTubeId}
 
     newChannels.each_slice(50) do |slice|
       options = {
