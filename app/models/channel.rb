@@ -4,30 +4,34 @@ class Channel < ActiveRecord::Base
   has_many :videos
 
   def fetchVideos
-    options = {
-      :maxResults => 50,
-      :type => "video",
-      :order => "viewCount",
-      :channelId => youTubeId,
-      :part => 'id,snippet'
-    }
-    response = GoogleApi.client.execute!(
-      :api_method => GoogleApi.youtube.search.list,
-      :parameters => options
-    )
-    response.data.items
-  end
+    total = 1
+    completed = 0
+    nextPageToken = nil
+    until completed >= total do
+      options = {
+        :type => "video",
+        :channelId => youTubeId,
+        :part => 'id,snippet',
+        :pageToken => nextPageToken,
+        :maxResults => 50
+      }
+      response = GoogleApi.client.execute!(
+        :api_method => GoogleApi.youtube.search.list,
+        :parameters => options
+      )
 
-  def createVideos
-    videos = fetchVideos
-    puts "Checking #{videos.length} videos"
-    videos.each do |search_result|
-      next if Video.find_by_youtubeVideoId search_result.id.videoId
-      Video.create do |v|
-        v.title = search_result.snippet.title
-        v.channel_id = id
-        v.youtubeVideoId = search_result.id.videoId
+      response.data.items.each do |result|
+        next if Video.find_by_youtubeVideoId result.id.videoId
+        Video.create do |v|
+          v.title = result.snippet.title
+          v.channel_id = id
+          v.youtubeVideoId = result.id.videoId
+        end
       end
+      total = response.data.pageInfo.totalResults
+      nextPageToken = response.data.nextPageToken if response.data.items.length == 50 
+      completed += response.data.items.length
+      puts "#{completed}/#{total}\n"*10
     end
     nil
   end
@@ -79,6 +83,6 @@ class Channel < ActiveRecord::Base
   end
 
   def self.getAllVideos
-    Channel.all.each {|c| c.createVideos}
+    Channel.all.each {|c| c.fetchVideos}
   end
 end
