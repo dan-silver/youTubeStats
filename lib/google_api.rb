@@ -6,10 +6,10 @@ module GoogleApi
     )
 
     key = Google::APIClient::PKCS12.load_key '../youtube/client.p12', 'notasecret'
-        service_account = Google::APIClient::JWTAsserter.new(
-            ENV['GOOGLE_KEY'],
-            'https://www.googleapis.com/auth/youtube',
-             key)
+    service_account = Google::APIClient::JWTAsserter.new(
+      ENV['GOOGLE_KEY'],
+      'https://www.googleapis.com/auth/youtube',
+      key)
     client.authorization = service_account.authorize
     client
   end

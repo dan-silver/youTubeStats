@@ -3,18 +3,16 @@ class Channel < ActiveRecord::Base
   has_many :videos
 
   def fetchVideos
-    @@id = youTubeId #hack
-    opts = Trollop::options do
-      opt :maxResults, 'Max results', :default => 50
-      opt :type, 'Type', :default => 'video'
-      opt :order, 'Order', :default => 'viewCount'
-      opt :channelId, 'Channel Id', :default => @@id
-    end
-
-    opts[:part] = 'id,snippet'
+    options = {
+      :maxResults => 50,
+      :type => "video",
+      :order => "viewCount",
+      :channelId => youTubeId,
+      :part => 'id,snippet'
+    }
     search_response = GoogleApi.client.execute!(
       :api_method => GoogleApi.youtube.search.list,
-      :parameters => opts
+      :parameters => options
     )
     search_response.data.items
   end
@@ -22,15 +20,14 @@ class Channel < ActiveRecord::Base
   def getStats
   	vid_ids = self.videos.map{|video| video.youtubeVideoId}.join ","
 
-    opts = Trollop::options do
-      opt :maxResults, 'Max results', :default => 50
-      opt :id, 'Channel Id', :default => vid_ids
-    end
-
-    opts[:part] = 'statistics'
+    options = {
+      :maxResults => 50,
+      :id => vid_ids,
+      :part => 'statistics'
+    }
     search_response = GoogleApi.client.execute!(
       :api_method => GoogleApi.youtube.videos.list,
-      :parameters => opts
+      :parameters => options
     )
 
     search_response.data.items.each do |result|
