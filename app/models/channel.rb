@@ -32,13 +32,12 @@ class Channel < ActiveRecord::Base
 
     response.data.items.each do |result|
       video = Video.find_by_youtubeVideoId result.id
-      video.stats << VideoStatistic.create do |stat|
-        stat.video_id = result.id
+      VideoStatistic.create do |stat|
+        stat.video_id = video.id
         stat.viewCount = result.statistics.viewCount
         stat.likeCount = result.statistics.likeCount
         stat.dislikeCount = result.statistics.dislikeCount
       end
-      video.save
     end
   end
 
