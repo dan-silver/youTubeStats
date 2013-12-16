@@ -16,12 +16,21 @@ class Channel < ActiveRecord::Base
       :parameters => options
     )
     ids = Video.all.map {|v| v.youtubeVideoId}
+    newVideos = []
     response.data.items.each do |result|
-      next if ids.include? result.id.videoId
-      Video.create do |v|
+      next if ids.include? result.id.videoId #Check if we already have the video
+      #instantiate a new video, don't save it yet though
+      v = Video.new do |v|
         v.title = result.snippet.title
         v.channel_id = id
         v.youtubeVideoId = result.id.videoId
+      end
+      newVideos << v
+    end
+    #Save all the videos in one transaction...MUCH FASTER
+    Video.transaction do
+      newVideos.each do |video|
+        video.save
       end
     end
   end
