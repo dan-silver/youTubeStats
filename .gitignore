@@ -80,4 +80,4 @@ pickle-email-*.html
 
 
 #custom
-client.p12
+*.p12
