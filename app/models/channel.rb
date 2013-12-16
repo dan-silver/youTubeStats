@@ -90,6 +90,35 @@ class Channel < ActiveRecord::Base
     end
   end
 
+  def self.getSubscriberStats
+    Channel.all.each_slice(50) do |channels|
+      ids = channels.map{|channel| channel.youTubeId}.join ","
+      options = {
+        :id => ids,
+        :part => 'statistics'
+      }
+
+      response = GoogleApi.client.execute!(
+        :api_method => GoogleApi.youtube.channels.list,
+        :parameters => options
+      )
+      stats = []
+      response.data.items.each do |result|
+        channel = Channel.find_by_youTubeId result.id
+        stats << ChannelStat.new do |stat|
+          stat.channel_id = channel.id
+          stat.subscribers = result.statistics.subscriberCount
+        end
+      end
+      #save the stats in bulk, 1 transaction instead of 50...much faster
+      ChannelStat.transaction do
+        stats.each do |stat|
+          stat.save
+        end
+      end
+    end
+  end
+
   def self.getAllVideos
     Channel.all.each {|c| c.fetchVideos}
   end

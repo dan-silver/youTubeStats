@@ -1,4 +1,6 @@
 %h1 Channels
 %ul
   -@channels.each do |channel|
-    %li=link_to channel.name, channel
+    %li
+      =link_to channel.name, channel
+      ="(#{number_with_delimiter(channel.stats.last.subscribers)} subscribers)"
