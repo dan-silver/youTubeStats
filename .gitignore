@@ -76,3 +76,8 @@ pickle-email-*.html
 
 # Ignore application configuration
 /config/application.yml
+
+
+
+#custom
+client.p12
