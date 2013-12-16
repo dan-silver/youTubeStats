@@ -27,6 +27,7 @@ class Video < ActiveRecord::Base
           stat.dislikeCount = result.statistics.dislikeCount
         end
       end
+      #save the stats in bulk, 1 transaction instead of 50...much faster
       VideoStatistic.transaction do
         stats.each do |stat|
           stat.save

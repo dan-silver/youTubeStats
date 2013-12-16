@@ -35,13 +35,13 @@ class Channel < ActiveRecord::Base
     end
   end
 
-  def self.fetchChannelsByTopVideos(videos = 50)
+  def self.fetchChannelsByTopVideos(videos = 725)
     remaining = videos
     nextPageToken = nil
     newChannels = []
 
     until remaining == 0 do
-      this_batch_count = [50, remaining].min
+      this_batch_count = [50, remaining].min #50 is the max Google allows per call
       remaining -= this_batch_count
       options = {
         :maxResults => this_batch_count,
@@ -72,12 +72,20 @@ class Channel < ActiveRecord::Base
         :api_method => GoogleApi.youtube.channels.list,
         :parameters => options
       )
+      channels = []
       response.data.items.each do |channel|
-        Channel.create do |c|
+        channels << Channel.new do |c|
           c.name = channel.snippet.title
           c.youTubeId = channel.id
         end
       end
+
+      Channel.transaction do
+        channels.each do |channel|
+          channel.save
+        end
+      end
+
     end
   end
 
