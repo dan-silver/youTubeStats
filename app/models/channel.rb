@@ -1,4 +1,5 @@
 require 'google_api'
+require 'batch_save'
 require 'enumerator'
 class Channel < ActiveRecord::Base
   has_many :videos
@@ -28,12 +29,7 @@ class Channel < ActiveRecord::Base
       end
       newVideos << v
     end
-    #Save all the videos in one transaction...MUCH FASTER
-    Video.transaction do
-      newVideos.each do |video|
-        video.save
-      end
-    end
+    newVideos.batchSave
   end
 
   def self.fetchChannelsByTopVideos(videos = 725)
@@ -80,13 +76,7 @@ class Channel < ActiveRecord::Base
           c.youTubeId = channel.id
         end
       end
-
-      Channel.transaction do
-        channels.each do |channel|
-          channel.save
-        end
-      end
-
+      channels.batchSave
     end
   end
 
@@ -110,12 +100,7 @@ class Channel < ActiveRecord::Base
           stat.subscribers = result.statistics.subscriberCount
         end
       end
-      #save the stats in bulk, 1 transaction instead of 50...much faster
-      ChannelStat.transaction do
-        stats.each do |stat|
-          stat.save
-        end
-      end
+      stats.batchSave
     end
   end
 
