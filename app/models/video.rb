@@ -17,17 +17,21 @@ class Video < ActiveRecord::Base
         :api_method => GoogleApi.youtube.videos.list,
         :parameters => options
       )
-
+      stats = []
       response.data.items.each do |result|
         video = Video.find_by_youtubeVideoId result.id
-        VideoStatistic.create do |stat|
+        stats << VideoStatistic.new do |stat|
           stat.video_id = video.id
           stat.viewCount = result.statistics.viewCount
           stat.likeCount = result.statistics.likeCount
           stat.dislikeCount = result.statistics.dislikeCount
         end
       end
-
+      VideoStatistic.transaction do
+        stats.each do |stat|
+          stat.save
+        end
+      end
     end
   end
 end
