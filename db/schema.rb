@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131214230026) do
+ActiveRecord::Schema.define(version: 20131216214841) do
+
+  create_table "channel_stats", force: true do |t|
+    t.integer  "subscribers"
+    t.integer  "channel_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "channel_stats", ["channel_id"], name: "index_channel_stats_on_channel_id"
 
   create_table "channels", force: true do |t|
     t.string   "name"

@@ -2,6 +2,7 @@ require 'google_api'
 require 'enumerator'
 class Channel < ActiveRecord::Base
   has_many :videos
+  has_many :stats, :foreign_key => 'channel_id', :class_name => "ChannelStat"
 
   def fetchVideos
     options = {
