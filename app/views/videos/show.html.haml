@@ -11,6 +11,6 @@
   -@video.stats.each do |stat|
     %tr
       %td=stat.created_at.to_formatted_s(:long)
-      %td=stat.likeCount
-      %td=stat.dislikeCount
-      %td=stat.viewCount
+      %td=number_with_delimiter stat.likeCount
+      %td=number_with_delimiter stat.dislikeCount
+      %td=number_with_delimiter stat.viewCount
