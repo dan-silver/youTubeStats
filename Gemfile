@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 ruby '2.0.0'
 gem 'rails', '4.0.2'
-gem 'sqlite3'
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
@@ -15,7 +14,7 @@ gem 'haml-rails'
 gem 'simple_form'
 gem 'thin'
 gem 'google-api-client', :require => 'google/api_client'
-gem 'trollop'
+gem 'pg'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
