@@ -1,4 +1,6 @@
-%h3 Home
-- @users.each do |user|
-  %p
-    User: #{link_to user.name, user}
+%h1 Channels
+%ul
+  -@channels.each do |channel|
+    %li
+      =link_to channel.name, channel
+      ="(#{number_with_delimiter(channel.stats.last.subscribers)} subscribers)" if channel.stats.last
