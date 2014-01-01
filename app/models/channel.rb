@@ -74,6 +74,7 @@ class Channel < ActiveRecord::Base
         channels << Channel.new do |c|
           c.name = channel.snippet.title
           c.youTubeId = channel.id
+          c.picture = channel.snippet.thumbnails.default.url
         end
       end
       channels.batchSave

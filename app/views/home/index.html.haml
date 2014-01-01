@@ -2,9 +2,9 @@
   -@channels.each do |channel|
     .col-sm-6.col-md-4
       .thumbnail
-        %img{:"src"=>"http://placehold.it/300x200"}
+        =image_tag channel.picture, :class => 'pull-right'
         .caption
-          %h3=channel.name
+          %h3=link_to channel.name, channel
           %p="#{number_with_delimiter(channel.stats.last.subscribers)} subscribers" if channel.stats.last
           %p
             =link_to "Videos", channel, :class => 'btn btn-primary', :role => 'button'

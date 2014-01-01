@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131216214841) do
+ActiveRecord::Schema.define(version: 20140101212939) do
 
   create_table "channel_stats", force: true do |t|
     t.integer  "subscribers"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20131216214841) do
     t.string   "youTubeId"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "picture"
   end
 
   create_table "users", force: true do |t|
