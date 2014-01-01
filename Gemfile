@@ -17,6 +17,7 @@ gem 'google-api-client', :require => 'google/api_client'
 
 group :production do # Postgres for heroku
   gem 'pg'
+  gem 'rails_12factor'
 end
 
 group :development do
