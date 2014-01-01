@@ -1,9 +1,6 @@
 // Place all the styles related to the channels controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.thumbnail {
-  min-height: 146px;
-}
 
 @media (min-width: 992px) { 
   .video_screenshot {
@@ -11,4 +8,11 @@
     top: 25px;
     right: 8px;
   }
+  .video {
+    min-height: 185px !important;
+  }
+}
+
+span.glyphicon.glyphicon-thumbs-down {
+	margin-left: 10px;
 }
