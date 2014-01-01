@@ -18,4 +18,5 @@
                 =#link_to "Videos", channel, :class => 'btn btn-primary', :role => 'button'
                 =#link_to "Button", "#", :class => 'btn btn-default', :role => 'button'
           .col-md-3
-            =image_tag video.picture, :class => 'video_screenshot'
+            =link_to "http://www.youtube.com/watch?v=#{video.youtubeVideoId}" do
+              =image_tag video.picture, :class => 'video_screenshot'
