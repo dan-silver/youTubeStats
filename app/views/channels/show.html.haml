@@ -1,4 +1,19 @@
 %h1=@channel.name
-%ul
-  -@channel.videos.each do |video|
-    %li=link_to video.title, video
+-@channel.videos.each do |video|
+  .col-sm-12.col-md-6
+    .thumbnail
+      .row
+        .col-md-8
+          .caption 
+            %h4=link_to video.title, video
+            %p="#{number_with_delimiter(video.stats.last.viewCount)} views" if video.stats
+            %p
+              %span.glyphicon.glyphicon-thumbs-up
+              =number_with_delimiter video.stats.last.likeCount
+              %span.glyphicon.glyphicon-thumbs-down
+              =number_with_delimiter video.stats.last.dislikeCount
+            %p
+              =#link_to "Videos", channel, :class => 'btn btn-primary', :role => 'button'
+              =#link_to "Button", "#", :class => 'btn btn-default', :role => 'button'
+        .col-md-4
+          =image_tag video.picture, :class => 'video_screenshot'

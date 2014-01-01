@@ -26,6 +26,7 @@ class Channel < ActiveRecord::Base
         v.title = result.snippet.title
         v.channel_id = id
         v.youtubeVideoId = result.id.videoId
+        v.picture = result.snippet.thumbnails.default.url
       end
       newVideos << v
     end

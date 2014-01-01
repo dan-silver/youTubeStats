@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140101212939) do
+ActiveRecord::Schema.define(version: 20140101220213) do
 
   create_table "channel_stats", force: true do |t|
     t.integer  "subscribers"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20140101212939) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "youtubeVideoId"
+    t.string   "picture"
   end
 
   add_index "videos", ["channel_id"], name: "index_videos_on_channel_id"
