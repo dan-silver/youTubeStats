@@ -14,8 +14,13 @@ gem 'haml-rails'
 gem 'simple_form'
 gem 'thin'
 gem 'google-api-client', :require => 'google/api_client'
-gem 'pg'
+
+group :production do # Postgres for heroku
+  gem 'pg'
+end
+
 group :development do
+  gem 'sqlite3'
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
   gem 'html2haml'
