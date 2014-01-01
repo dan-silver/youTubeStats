@@ -1,6 +1,11 @@
-%h1 Channels
-%ul
+.row
   -@channels.each do |channel|
-    %li
-      =link_to channel.name, channel
-      ="(#{number_with_delimiter(channel.stats.last.subscribers)} subscribers)" if channel.stats.last
+    .col-sm-6.col-md-4
+      .thumbnail
+        %img{:"src"=>"http://placehold.it/300x200"}
+        .caption
+          %h3=channel.name
+          %p="#{number_with_delimiter(channel.stats.last.subscribers)} subscribers" if channel.stats.last
+          %p
+            =link_to "Videos", channel, :class => 'btn btn-primary', :role => 'button'
+            =link_to "Button", "#", :class => 'btn btn-default', :role => 'button'
