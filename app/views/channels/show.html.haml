@@ -1,9 +1,8 @@
 %ol.breadcrumb
   %li=link_to "Home", root_path
   %li=link_to @channel.name, @channel
-%h1
 %h1=@channel.name
-
+%p="#{number_with_delimiter(@channel.stats.last.subscribers)} subscribers" if @channel.stats.last
 .row
   -@channel.videos.each do |video|
     .col-sm-12.col-md-6.video
