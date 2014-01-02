@@ -1,7 +1,9 @@
+%ol.breadcrumb
+  %li=link_to "Home", root_path
+  %li=link_to @video.channel.name, @video.channel
+  %li=link_to @video.title, @video
 %h1
   =@video.title
-  by
-  =link_to @video.channel.name, @video.channel
 %table.table.table-striped.table-bordered
   %tr
     %th Date

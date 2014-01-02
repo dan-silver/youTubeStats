@@ -11,7 +11,9 @@
  *= require_self
  *= require_tree .
  */
-
+main {
+  padding-top: 15px;
+}
 #github-ribbon {
   position: fixed;
   top: 0;
