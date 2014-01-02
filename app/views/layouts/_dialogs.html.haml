@@ -6,6 +6,12 @@
         %h4.modal-title#myModalLabel About
       .modal-body
         %p This site pulls data from the YouTube API for top channels. Since some videos hide their statistics on youtube.com, I wanted to track them on my own.
+        %p The database currently includes:
+        %ul
+          %li="#{Video.all.length} videos"
+          %li="#{Channel.all.length} channels"
+          %li="#{VideoStatistic.all.length} video statistics"
+          %li="#{ChannelStat.all.length} channel statistics"
         %p Built with Ruby on Rails.
       .modal-footer
         %button.btn.btn-default{:type => "button", :"data-dismiss" => "modal"} Close
