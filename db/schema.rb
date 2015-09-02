@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20140101220213) do
 
-  create_table "channel_stats", force: true do |t|
+  create_table "channel_stats", force: :cascade do |t|
     t.integer  "subscribers"
     t.integer  "channel_id"
     t.datetime "created_at"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20140101220213) do
 
   add_index "channel_stats", ["channel_id"], name: "index_channel_stats_on_channel_id"
 
-  create_table "channels", force: true do |t|
+  create_table "channels", force: :cascade do |t|
     t.string   "name"
     t.string   "youTubeId"
     t.datetime "created_at"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20140101220213) do
     t.string   "picture"
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 20140101220213) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
-  create_table "video_statistics", force: true do |t|
+  create_table "video_statistics", force: :cascade do |t|
     t.integer  "video_id"
     t.integer  "viewCount"
     t.integer  "likeCount"
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 20140101220213) do
 
   add_index "video_statistics", ["video_id"], name: "index_video_statistics_on_video_id"
 
-  create_table "videos", force: true do |t|
+  create_table "videos", force: :cascade do |t|
     t.string   "title"
     t.integer  "channel_id"
     t.datetime "created_at"

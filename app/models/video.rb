@@ -1,4 +1,4 @@
-require 'google_api'
+require 'youTubeClient'
 require 'enumerator'
 class Video < ActiveRecord::Base
   belongs_to :channel

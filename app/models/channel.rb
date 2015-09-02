@@ -1,31 +1,27 @@
-require 'google_api'
+require 'youTubeClient'
 require 'batch_save'
 require 'enumerator'
 class Channel < ActiveRecord::Base
   has_many :videos
   has_many :stats, :foreign_key => 'channel_id', :class_name => "ChannelStat"
 
-  def fetchVideos
+  def fetchTopVideos
     options = {
       :type => "video",
       :order => "viewCount",
-      :channelId => youTubeId,
-      :part => 'id,snippet',
-      :maxResults => 50
+      :channel_id => youTubeId,
+      :max_results => 50
     }
-    response = GoogleApi.client.execute!(
-      :api_method => GoogleApi.youtube.search.list,
-      :parameters => options
-    )
+    response = YouTube.client.list_searches("snippet", options)
     ids = Video.all.map {|v| v.youtubeVideoId}
     newVideos = []
-    response.data.items.each do |result|
-      next if ids.include? result.id.videoId #Check if we already have the video
+    response.items.each do |result|
+      next if ids.include? result.id.video_id #Check if we already have the video
       #instantiate a new video, don't save it yet though
       v = Video.new do |v|
         v.title = result.snippet.title
         v.channel_id = id
-        v.youtubeVideoId = result.id.videoId
+        v.youtubeVideoId = result.id.video_id
         v.picture = result.snippet.thumbnails.default.url
       end
       newVideos << v
@@ -42,36 +38,30 @@ class Channel < ActiveRecord::Base
       this_batch_count = [50, remaining].min #50 is the max Google allows per call
       remaining -= this_batch_count
       options = {
-        :maxResults => this_batch_count,
+        :max_results => this_batch_count,
         :type => "video",
         :order => "viewCount",
-        :part => "id,snippet",
-        :pageToken => nextPageToken
+        :page_token => nextPageToken
       }
-      response = GoogleApi.client.execute!(
-        :api_method => GoogleApi.youtube.search.list,
-        :parameters => options
-      )
+      response = YouTube.client.list_searches("snippet", options)
 
-      nextPageToken = response.data.nextPageToken
-      response.data.items.each do |video|
+      nextPageToken = response.next_page_token
+      response.items.each do |video|
         newChannels << video.snippet.channel_id unless newChannels.include?(video.snippet.channel_id)
       end
     end
+
     newChannels -= Channel.all.map {|a| a.youTubeId}
 
     newChannels.each_slice(50) do |slice|
       options = {
-        :part => "id,snippet,statistics",
         :id => slice.join(",")
       }
 
-      response = GoogleApi.client.execute!(
-        :api_method => GoogleApi.youtube.channels.list,
-        :parameters => options
-      )
+      response = YouTube.client.list_channels("id,snippet", options)
+
       channels = []
-      response.data.items.each do |channel|
+      response.items.each do |channel|
         channels << Channel.new do |c|
           c.name = channel.snippet.title
           c.youTubeId = channel.id
@@ -107,6 +97,6 @@ class Channel < ActiveRecord::Base
   end
 
   def self.getAllVideos
-    Channel.all.each {|c| c.fetchVideos}
+    Channel.all.each {|c| c.fetchTopVideos}
   end
 end
