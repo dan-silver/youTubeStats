@@ -29,7 +29,7 @@ class Channel < ActiveRecord::Base
     newVideos.batchSave
   end
 
-  def self.fetchChannelsByTopVideos(videos = 725)
+  def self.fetchChannelsByTopVideos(videos = 2000)
     remaining = videos
     nextPageToken = nil
     newChannels = []
@@ -76,20 +76,15 @@ class Channel < ActiveRecord::Base
     Channel.all.each_slice(50) do |channels|
       ids = channels.map{|channel| channel.youTubeId}.join ","
       options = {
-        :id => ids,
-        :part => 'statistics'
+        :id => ids
       }
-
-      response = GoogleApi.client.execute!(
-        :api_method => GoogleApi.youtube.channels.list,
-        :parameters => options
-      )
+      response = YouTube.client.list_channels("statistics", options)
       stats = []
-      response.data.items.each do |result|
+      response.items.each do |result|
         channel = Channel.find_by_youTubeId result.id
         stats << ChannelStat.new do |stat|
           stat.channel_id = channel.id
-          stat.subscribers = result.statistics.subscriberCount
+          stat.subscribers = result.statistics.subscriber_count
         end
       end
       stats.batchSave

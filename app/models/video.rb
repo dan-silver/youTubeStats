@@ -1,5 +1,7 @@
 require 'youTubeClient'
+require 'batch_save'
 require 'enumerator'
+
 class Video < ActiveRecord::Base
   belongs_to :channel
   has_many :stats, :foreign_key => 'video_id', :class_name => "VideoStatistic"
@@ -8,22 +10,19 @@ class Video < ActiveRecord::Base
     Video.all.each_slice(50) do |videos|
       vid_ids = videos.map{|video| video.youtubeVideoId}.join ","
       options = {
-        :id => vid_ids,
-        :part => 'statistics'
+        :id => vid_ids
       }
 
-      response = GoogleApi.client.execute!(
-        :api_method => GoogleApi.youtube.videos.list,
-        :parameters => options
-      )
+      response = YouTube.client.list_videos("statistics", options)
+
       stats = []
-      response.data.items.each do |result|
+      response.items.each do |result|
         video = Video.find_by_youtubeVideoId result.id
         stats << VideoStatistic.new do |stat|
           stat.video_id = video.id
-          stat.viewCount = result.statistics.viewCount
-          stat.likeCount = result.statistics.likeCount
-          stat.dislikeCount = result.statistics.dislikeCount
+          stat.viewCount = result.statistics.view_count
+          stat.likeCount = result.statistics.like_count
+          stat.dislikeCount = result.statistics.dislike_count
         end
       end
       stats.batchSave

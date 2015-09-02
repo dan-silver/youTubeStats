@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140101220213) do
+ActiveRecord::Schema.define(version: 20150902234642) do
 
   create_table "channel_stats", force: :cascade do |t|
     t.integer  "subscribers"
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 20140101220213) do
 
   create_table "video_statistics", force: :cascade do |t|
     t.integer  "video_id"
-    t.integer  "viewCount"
+    t.integer  "viewCount",    limit: 8
     t.integer  "likeCount"
     t.integer  "dislikeCount"
     t.datetime "created_at"

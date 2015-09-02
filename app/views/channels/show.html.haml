@@ -11,7 +11,7 @@
           .col-md-9
             .caption 
               %h4=link_to video.title, video
-              - if video.stats.length > 0
+              - if video.stats.last
                 %p="#{number_with_delimiter(video.stats.last.viewCount)} views"
                 %p
                   %span.glyphicon.glyphicon-thumbs-up
