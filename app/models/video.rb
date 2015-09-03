@@ -23,6 +23,7 @@ class Video < ActiveRecord::Base
           stat.viewCount = result.statistics.view_count
           stat.likeCount = result.statistics.like_count
           stat.dislikeCount = result.statistics.dislike_count
+          stat.commentCount = result.statistics.comment_count
         end
       end
       stats.batchSave
