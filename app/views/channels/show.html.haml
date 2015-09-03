@@ -4,7 +4,7 @@
 %h1=@channel.name
 %p="#{number_with_delimiter(@channel.stats.last.subscribers)} subscribers" if @channel.stats.last
 .row
-  -@channel.videos.each do |video|
+  -@channel.videos.sort_by{|v| v.stats.last.viewCount}.reverse.each do |video|
     .col-sm-12.col-md-6.video
       .thumbnail
         .row
