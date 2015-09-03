@@ -23,6 +23,7 @@ db/*.sqlite3
 # various artifacts
 **.war
 *.rbc
+*.log
 *.sassc
 .rspec
 .redcar/
@@ -37,6 +38,7 @@ db/*.sqlite3
 /doc/app/
 /doc/features.html
 /doc/specs.html
+/public/assets
 /public/cache
 /public/stylesheets/compiled
 /public/system/*
@@ -83,3 +85,4 @@ pickle-email-*.html
 *.p12
 .elasticbeanstalk/
 .sqlite3-journal
+shared/pids/*

@@ -19,6 +19,8 @@ gem 'googleauth'
 group :production do # Postgres for heroku
   gem 'pg'
   gem 'rails_12factor'
+  # Use Unicorn as the app server
+  gem 'unicorn'
 end
 
 group :development do
